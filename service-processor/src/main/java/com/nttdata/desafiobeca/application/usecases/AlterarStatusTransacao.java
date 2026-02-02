@@ -1,5 +1,7 @@
 package com.nttdata.desafiobeca.application.usecases;
 
+import com.nttdata.desafiobeca.application.exceptions.LimiteExcedidoException;
+import com.nttdata.desafiobeca.application.exceptions.SaldoInsuficienteException;
 import com.nttdata.desafiobeca.application.exceptions.TransacaoNaoEncontradaException;
 import com.nttdata.desafiobeca.application.gateways.RepositorioDeContaBancaria;
 import com.nttdata.desafiobeca.application.gateways.RepositorioDeProcessor;
@@ -22,16 +24,22 @@ public class AlterarStatusTransacao {
         Transaction transaction = repositorio.buscarPorId(transactionId)
                 .orElseThrow(() -> new TransacaoNaoEncontradaException("Transação não encontrada"));
 
-        var conta = contaBancaria.buscarDadosBancarios(transaction.getClienteId());
+        try {
+            var conta = contaBancaria.buscarDadosBancarios(transaction.getClienteId());
 
-        transaction.processar(conta.saldo(), conta.limiteDiario(), conta.ativa());
+            // Aqui acontecem suas validações de saldo e limite!
+            transaction.processar(conta.saldo(), conta.limiteDiario(), conta.ativa());
 
-        if (transaction.getStatus().equals(StatusTransacao.APPROVED)) {
+            // Só entra aqui se o status for APPROVED (sem exceções disparadas)
             var novoSaldo = transaction.calcularNovoSaldo(conta.saldo());
-
             contaBancaria.atualizarSaldo(transaction.getClienteId(), novoSaldo);
-        }
 
-        repositorio.atualizarStatus(transaction);
+        } catch (SaldoInsuficienteException | LimiteExcedidoException e) {
+            // Se a regra falhar, marcamos como REJECTED
+            transaction.rejeitar();
+        } finally {
+            // Independente de sucesso ou erro de regra, atualizamos o status no banco
+            repositorio.atualizarStatus(transaction);
+        }
     }
 }
