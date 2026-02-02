@@ -16,9 +16,8 @@ public record TransactionResponseDTO(
         StatusTransacao status,
         LocalDateTime dataCriacao,
         String tipo,
-        BigDecimal saldoAtualNoMock // O campo novo entra aqui!
+        BigDecimal saldoAtualNoMock
 ) {
-    // Construtor principal para quando temos o saldo do Mock
     public TransactionResponseDTO(Transaction t, BigDecimal saldoMock) {
         this(
                 t.getId(),
@@ -33,7 +32,6 @@ public record TransactionResponseDTO(
         );
     }
 
-    // Sobrecarga para quando NÃO temos o saldo (ex: listagens simples)
     public TransactionResponseDTO(Transaction t) {
         this(t, null);
     }

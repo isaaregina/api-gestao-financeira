@@ -1,5 +1,6 @@
 package com.nttdata.desafiobeca.application.usecases;
 
+import com.nttdata.desafiobeca.application.exceptions.ClienteJaCadastradoException;
 import com.nttdata.desafiobeca.application.gateways.RepositorioDeCliente;
 import com.nttdata.desafiobeca.domain.Cliente;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,10 @@ public class CriarCliente {
     }
 
     public Cliente cadastrarCliente(Cliente cliente) {
+        if (repositorio.existePorEmail(cliente.getEmail())) {
+            throw new ClienteJaCadastradoException("Cliente já existe.");
+        }
+
         String senhaCriptografada = passwordEncoder.encode(cliente.getSenha());
 
         Cliente clienteComSenhaProtegida = new Cliente(

@@ -45,7 +45,6 @@ public class CadastrarTransacao {
 //            throw new MockContaBancariaNaoExistenteException("Operação cancelada: Este usuário não possui conta bancária ativa no parceiro.");
 //        }
 
-        // Vincula a transação ao cliente extraído do Token JWT
         dados.setClienteId(clienteIdAutenticado);
 
         dados.prepararNovaTransacao();
@@ -66,7 +65,6 @@ public class CadastrarTransacao {
 
         while (tentativas < 5) {
             try {
-                // A BrasilAPI exige o formato AAAA-MM-DD (ISO_LOCAL_DATE)
                 String dataFormatada = dataConsulta.format(DateTimeFormatter.ISO_LOCAL_DATE);
 
                 System.out.println("Tentando data: " + dataFormatada + " para moeda: " + moeda);
@@ -77,7 +75,6 @@ public class CadastrarTransacao {
                     return resposta.cotacoes().get(0).cotacaoCompra();
                 }
             } catch (Exception e) {
-                // Se cair aqui, o log vai nos dizer se foi erro de conexão ou 404
                 System.err.println("Erro na data " + dataConsulta + ": " + e.getMessage());
             }
 

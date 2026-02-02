@@ -21,57 +21,6 @@ public class TransactionConsumer {
 
     @KafkaListener(topics = "transaction.requested", groupId = "processor-group")
     public void consumir(TransactionEventDTO event) {
-        // O Consumer apenas atende o telefone e passa para o cérebro (Processor)
         transactionProcessor.processar(event.id());
     }
 }
-
-//@Component
-//@RequiredArgsConstructor
-//public class TransactionConsumer {
-//
-//    private final AlterarStatusTransacao alterarStatusTransacao;
-//
-//    @KafkaListener(topics = "transaction.requested", groupId = "processor-group")
-//    public void consumir(TransactionEventDTO event) {
-//        try {
-//            // O Use Case agora é o responsável por dar o veredito final (Aprovar ou Rejeitar)
-//            alterarStatusTransacao.executar(event.id());
-//        } catch (Exception e) {
-//            // Erros técnicos (ex: Banco caiu, MockAPI fora do ar)
-//            // Aqui o Kafka pode tentar processar de novo (Retry) se você não der catch em tudo
-//            System.err.println("Erro crítico ao processar transação " + event.id() + ": " + e.getMessage());
-//        }
-//    }
-//}
-
-//@Component
-//@RequiredArgsConstructor
-//public class TransactionConsumer {
-//
-//    private final AlterarStatusTransacao alterarStatusTransacao;
-//    private final RepositorioDeProcessor repositorio; // Para salvar o erro se o use case falhar
-//
-//    @KafkaListener(topics = "transaction.requested", groupId = "processor-group")
-//    public void consumir(TransactionEventDTO event) {
-//        try {
-//            alterarStatusTransacao.executar(event.id());
-//        } catch (SaldoInsuficienteException | LimiteExcedidoException e) {
-//            // Aqui você trata sem "explodir" o sistema
-//            System.err.println("Regra de negócio violada: " + e.getMessage());
-//            marcarComoRejeitada(event.id(), e.getMessage());
-//        } catch (Exception e) {
-//            // Erros técnicos (ex: MockAPI fora do ar)
-//            System.err.println("Erro técnico ao processar: " + e.getMessage());
-//            // Aqui você decide: ou rejeita ou deixa o Kafka tentar de novo (Retry)
-//        }
-//    }
-//
-//    private void marcarComoRejeitada(UUID id, String motivo) {
-//        repositorio.buscarPorId(id).ifPresentOrElse(transaction -> {
-//            transaction.rejeitar();
-//            repositorio.atualizarStatus(transaction);
-//            System.out.println("Transação " + id + " marcada como REJECTED no banco. Motivo: " + motivo);
-//        }, () -> System.err.println("Erro: Transação " + id + " não encontrada para rejeição."));
-//    }
-//}

@@ -22,11 +22,8 @@ public class RepositorioDeTransactionJpa implements RepositorioDeTransaction {
 
     @Override
     public Transaction cadastrar(Transaction transaction) {
-        // Converte o que veio do domínio para a tabela do banco
         TransactionEntity entity = mapper.toEntity(transaction);
-        // Salva de fato no PostgreSQL
         TransactionEntity salva = repositorio.save(entity);
-        // Retorna para o domínio como um objeto puro de novo
         return mapper.toDomain(salva);
     }
 

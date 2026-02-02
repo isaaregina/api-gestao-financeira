@@ -1,5 +1,6 @@
 package com.nttdata.desafiobeca.infra.controller.exception;
 
+import com.nttdata.desafiobeca.application.exceptions.ClienteJaCadastradoException;
 import com.nttdata.desafiobeca.application.exceptions.ClienteNaoEncontradoException;
 import com.nttdata.desafiobeca.application.exceptions.ImportacaoClientesException;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Erro interno ao processar segurança: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ClienteJaCadastradoException.class)
+    public ResponseEntity<String> tratarErroClienteJaCadastrado(ClienteJaCadastradoException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
     }
 }

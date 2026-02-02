@@ -25,7 +25,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> {
                     // Swagger liberado
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
-                    // Qualquer outra rota de transação exige o Token do MS1
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

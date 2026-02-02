@@ -74,4 +74,9 @@ public class RepositorioDeClienteJpa implements RepositorioDeCliente {
         return repository.findByEmail(email)
                 .map(mapper::toDomain); // Usa o seu mapper para voltar para o objeto Cliente
     }
+
+    @Override
+    public boolean existePorEmail(String email) {
+        return repository.existsByEmail(email);
+    }
 }

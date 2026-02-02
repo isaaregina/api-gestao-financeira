@@ -16,7 +16,6 @@ public class AtualizarTransacao {
         Transaction existente = repositorio.buscarPorId(novosDados.getId())
                 .orElseThrow(() -> new TransacaoNaoEncontradaException("Transação não encontrada!"));
 
-        // REGRA DE OURO: Valida se o dono da transação é o mesmo que está logado
         if (!existente.getClienteId().equals(idRequisitante)) {
             throw new AcessoException("Acesso negado: Você não pode alterar transações de outro usuário.");
         }

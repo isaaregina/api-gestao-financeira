@@ -17,6 +17,7 @@ public interface RepositorioDeCliente {
 
     void excluiClientePorId(Long id);
 
-    // Na interface RepositorioDeCliente
     Optional<Cliente> buscarPorEmail(String email);
+
+    boolean existePorEmail(String email);
 }

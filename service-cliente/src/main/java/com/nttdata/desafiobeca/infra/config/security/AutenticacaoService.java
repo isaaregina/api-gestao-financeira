@@ -21,11 +21,9 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Buscamos o cliente pelo e-mail (username)
-        var cliente = repository.buscarPorEmail(email) // Garanta que este método existe no seu gateway/repositório
+        var cliente = repository.buscarPorEmail(email)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o e-mail: " + email));
 
-        // Retornamos um objeto que o Spring Security entende
         return new User(cliente.getEmail(), cliente.getSenha(), new ArrayList<>());
     }
 }

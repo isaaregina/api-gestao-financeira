@@ -25,7 +25,6 @@ public class RepositorioDeProcessorJpa implements RepositorioDeProcessor {
 
     @Override
     public void atualizarStatus(Transaction transaction) {
-        // Converte a Transaction de domínio de volta para Entity para salvar
         TransactionEntity entity = mapper.toEntity(transaction);
         jpaRepository.save(entity);
     }

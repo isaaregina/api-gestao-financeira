@@ -71,13 +71,11 @@ public class Transaction {
     public void processar(BigDecimal saldoAtual, BigDecimal limiteDisponivel, boolean contaAtiva) {
         if (!contaAtiva) {
             this.status = StatusTransacao.REJECTED;
-            // Você pode lançar uma ContaInativaException aqui se quiser que o Global trate
             return;
         }
         if (this.tipo == TipoTransacao.DEPOSIT) {
             this.status = StatusTransacao.APPROVED;
         } else {
-            // Saques/Pagamentos exigem validação de saldo e limite
             validarRegras(saldoAtual, limiteDisponivel);
             this.status = StatusTransacao.APPROVED;
         }
