@@ -12,19 +12,55 @@ public record TransactionResponseDTO(
         Long clienteId,
         BigDecimal valorOriginal,
         String moeda,
+        BigDecimal valorConvertido,
         StatusTransacao status,
         LocalDateTime dataCriacao,
-        String tipo
+        String tipo,
+        BigDecimal saldoAtualNoMock // O campo novo entra aqui!
 ) {
-    public TransactionResponseDTO(Transaction t) {
+    // Construtor principal para quando temos o saldo do Mock
+    public TransactionResponseDTO(Transaction t, BigDecimal saldoMock) {
         this(
                 t.getId(),
                 t.getClienteId(),
                 t.getValorOriginal(),
                 t.getMoeda(),
+                t.getValorConvertido(),
                 t.getStatus(),
                 t.getDataCriacao(),
-                t.getTipo().name()
+                t.getTipo().name(),
+                saldoMock
         );
     }
+
+    // Sobrecarga para quando NÃO temos o saldo (ex: listagens simples)
+    public TransactionResponseDTO(Transaction t) {
+        this(t, null);
+    }
 }
+
+
+
+//public record TransactionResponseDTO(
+//        UUID id,
+//        Long clienteId,
+//        BigDecimal valorOriginal,
+//        String moeda,
+//        BigDecimal valorConvertido,
+//        StatusTransacao status,
+//        LocalDateTime dataCriacao,
+//        String tipo
+//) {
+//    public TransactionResponseDTO(Transaction t) {
+//        this(
+//                t.getId(),
+//                t.getClienteId(),
+//                t.getValorOriginal(),
+//                t.getMoeda(),
+//                t.getValorConvertido(),
+//                t.getStatus(),
+//                t.getDataCriacao(),
+//                t.getTipo().name()
+//        );
+//    }
+//}

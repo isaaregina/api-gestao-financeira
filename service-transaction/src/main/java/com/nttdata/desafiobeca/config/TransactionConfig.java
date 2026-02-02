@@ -4,6 +4,7 @@ import com.nttdata.desafiobeca.application.gateways.EnviarEventoTransaction;
 import com.nttdata.desafiobeca.application.gateways.RepositorioDeTransaction;
 import com.nttdata.desafiobeca.application.usecases.*;
 import com.nttdata.desafiobeca.infra.clientes.BrasilApiClient;
+import com.nttdata.desafiobeca.infra.clientes.MockApiClient;
 import com.nttdata.desafiobeca.infra.gateways.RepositorioDeTransactionJpa;
 import com.nttdata.desafiobeca.infra.gateways.TransactionEntityMapper;
 import com.nttdata.desafiobeca.infra.persistence.TransactionRepository;
@@ -24,8 +25,8 @@ public class TransactionConfig {
     }
 
     @Bean
-    CadastrarTransacao cadastrarTransacao(RepositorioDeTransaction repositorioDeTransaction, BrasilApiClient apiClient, EnviarEventoTransaction enviarEventoTransaction) {
-        return new CadastrarTransacao(repositorioDeTransaction, apiClient, enviarEventoTransaction);
+    CadastrarTransacao cadastrarTransacao(RepositorioDeTransaction repositorioDeTransaction, BrasilApiClient apiClient, EnviarEventoTransaction enviarEventoTransaction, MockApiClient mockApiClient) {
+        return new CadastrarTransacao(repositorioDeTransaction, apiClient, enviarEventoTransaction, mockApiClient);
     }
 
     @Bean

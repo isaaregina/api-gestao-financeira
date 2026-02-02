@@ -2,6 +2,7 @@ package com.nttdata.desafiobeca.infra.controller.exception;
 
 import com.nttdata.desafiobeca.application.exceptions.AcessoException;
 import com.nttdata.desafiobeca.application.exceptions.CotacaoNaoEncontradaException;
+import com.nttdata.desafiobeca.application.exceptions.MockContaBancariaNaoExistenteException;
 import com.nttdata.desafiobeca.application.exceptions.TransacaoNaoEncontradaException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> tratarAcessoInvalido(AcessoException ex) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MockContaBancariaNaoExistenteException.class)
+    public ResponseEntity<String> tratarMockContaBancariaNaoExistente(MockContaBancariaNaoExistenteException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 }
